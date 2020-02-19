@@ -1,7 +1,7 @@
 # Take the input for how many words the user wants to give
 
 # Created two empty lists for the word as you take them, and their
-# final converted version
+# final converted versions
 words = []
 converted_words = []
 
