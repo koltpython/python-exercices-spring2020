@@ -1,0 +1,290 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[useregional]{datetime2}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings} 
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{titling}
+\usepackage{upquote}
+\usepackage{color}
+
+\usepackage{wrapfig}
+\usepackage{tikz}
+\usetikzlibrary{shapes.symbols,positioning, chains}
+
+\setcounter{secnumdepth}{4}
+
+\setlength{\droptitle}{-4em}
+
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+
+
+%Project Title
+\newcommand{\handoutTitle}{Error Handling, File Input & Output}
+%Homework Number
+\newcommand{\handoutNumber}{1}
+
+% Handout date goes here.
+% Format: # Day of Month
+\newcommand{\handoutDate}{10th of March}
+
+%Contact to reach.
+\newcommand{\contactName}{Ceren Kocaoğullar & Hasan Can Aslan}
+\newcommand{\contactMail}{ckocaogullar15, haslan16@ku.edu.tr}
+
+%Define colors as shown below to use in text.
+\definecolor{Red}{RGB}{255, 0, 0}
+\definecolor{Green}{RGB}{0, 255, 0}
+\definecolor{Blue}{RGB}{0, 0, 255}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% code listing style
+\lstset{language=Python}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\renewcommand{\lstlistingname}{Code snippet}
+ 
+\lstset{style=mystyle}
+
+\pagestyle{fancy}
+\fancyhf{}
+\chead{\handoutTitle}
+\rhead{Handout \#\handoutNumber}
+\lhead{KOLT Python}
+\lfoot{\nouppercase{\leftmark}}
+\rfoot{Page \thepage}
+\thispagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\author{\contactName\\\href{mailto:\contactMail}{\contactMail}}
+
+\title{\handoutTitle}
+
+\date{Date: \handoutDate}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+% Brief explanation of this section's goal
+This handout is prepared for \href{https://koltpython.com}{KOLT Python Certificate Program}. It contains a brief review of this week's topics and exercise questions.\\
+You can download the starter code from \href{https://kinolien.github.io/gitzip/?download=koltpython/python-exercises-spring2020/tree/master/section4/starter}{\underline{here}}.\\
+You can find the solutions at \href{https://kinolien.github.io/gitzip/?download=koltpython/python-exercises-spring2020/tree/master/section4/solution}{\underline{here}} after all the sections are conducted.
+
+\section{Review}
+% Basic review of related material
+% Remove this section if you believe it is unnecessary
+
+\subsection{Data Structures}
+\subsubsection{Tuples}
+\begin{itemize}
+    \item \textbf{Immutable} sequence of elements.
+    \subitem Cannot make changes on a tuple using functions like add(), append(), remove() etc.
+    \item Elements are \textbf{ordered.}
+    \subitem Therefore you \textbf{can} use indexing, slicing.
+    \subitem You can iterate over them using for loops.
+    \item To create an empty one: \texttt{tuple()} or just \texttt{()}.
+\end{itemize}
+
+\subsubsection{Sets}
+\begin{itemize}
+    \item \textbf{Unordered} sequence of elements.
+    \item Elements are \textbf{unique}.
+    \subitem Therefore you \textbf{cannot} use indexing/slicing.
+    \subitem But you \textbf{can} iterate over them with for loops.
+    \item Mutable, you can use add(element), remove(element) methods.
+    \item You can use \textbf{union, intersection, difference, symmetric difference} operations on them.
+    \item To create an empty one: \texttt{set()}.
+\end{itemize}
+
+\subsubsection{Dictionaries}
+        \begin{itemize}
+            \item Collection of \textbf{key$-$value} \underline{pairs}.
+            \item Keys of a dictionary are \textbf{unique}.
+            \item In general, they are not \textbf{ordered}. 
+            \subitem However, in Python 3.7 pairs are guaranteed to be in insertion order.
+            \subitem This means we will get pairs in insertion order if we loop over one.
+            \subitem However, you \underline{\textbf{cannot}} use \textbf{indexing/slicing}.
+            \subitem But you \textbf{can} iterate over them with \texttt{for} loops.
+            \item To create an empty one: \texttt{\{\}} or \texttt{dict()}: empty dictionary
+            \item To access values: \texttt{print(d[\textquotesingle one\textquotesingle ])} \# $\Rightarrow$ 1
+        \end{itemize}
+        
+\subsection{Error/Exception Handling}
+\subsubsection{Syntax Errors}
+Errors that you get when you have a \textbf{syntactically incorrect} piece of code. i.e. \underline{Code that doesn't follow the rules of coding in Phython}.
+\begin{lstlisting}
+    for i in range(100)
+    print(i)
+    # SyntaxError: invalid syntax
+    
+    while True:
+    print('Hello')
+    # IndentationError: expected an indented block
+\end{lstlisting}{}
+    
+\subsubsection{Runtime Errors}
+When a statement is \textbf{syntactically correct}, this doesn't mean we are safe. Python interpreter will run the code in that case, but can still raise errors.
+\begin{lstlisting}
+    print(3 / 0)
+    # ZeroDivisionError: division by zero
+    
+    int('hello')
+    # ValueError: invalid literal for int() with base 10: 'hello'
+    
+    'hello'[2] = 'a'
+    # TypeError: 'str' object does not support item assignment
+\end{lstlisting}{}
+
+\subsubsection{Try Except Blocks}
+To be safe from these errors, we could put \texttt{if} checks everywhere. But it would be too much effort, and probably we cannot list every condition. The solution is \texttt{try-except-finally} blocks.
+
+\begin{lstlisting}
+    try:
+        <risky-statement>
+        <risky-statement>
+        <risky-statement>
+        ...
+    except ValueError as valError:
+        print('value error', valError)
+    except (RuntimeError, TypeError, NameError):
+        print('One of the above errors, but not ValueError')
+    else:
+        print('Here, do what you want to do if there are no errors.')
+    finally:
+        print('This part runs no matter what.')
+\end{lstlisting}{}
+It is true that Python throws these errors anyway. However, if you handle them like this:
+\begin{itemize}
+    \item You hold the power over deciding what to do if an error occurs.
+    \item The program doesn't stop when it raises an exception. It just does what you wrote under the relevant except block and keeps running.
+\end{itemize}{}
+
+\textbf{Pro Tip:} You don't have to memorize the names of a whole list of errors! You can imagine what could go wrong, do the wrong thing and what the name of the error is from the Python itself!
+
+\subsection{File Input/Output}
+    Access to a \texttt{file object} using \texttt{\textbf{open(filename, mode=\textquotesingle r\textquotesingle )}} function
+    \begin{itemize}
+        \item \texttt{\textbf{filename}}: File name including the \textbf{file extension}. Ex: \textquotesingle data.txt\textquotesingle
+        \subitem If you want to access/create a file outside of current \textbf{working directory}, you also need to include its path. Ex: \textquotesingle ./FolderName/data.txt\textquotesingle , \textquotesingle C:/Users/AUYSAL16/Desktop/data.txt\textquotesingle
+        \item \textbf{\texttt{mode}} denotes how the file will be used. It is optional to declare mode, it has a default value of \texttt{w}:
+        \begin{itemize}
+            \item \textquotesingle r\textquotesingle : read mode, default
+            \item \textquotesingle w\textquotesingle : write mode, overrides the file contents if it already exists
+            \item \textquotesingle x\textquotesingle : create \& write mode, similar to write mode gives error if file already exists
+            \item \textquotesingle a\textquotesingle : append mode, adds content to the end of file
+        \end{itemize}
+    \end{itemize}
+
+\subsubsection{Reading file content}
+    \begin{itemize}
+        \item Open the file with read mode (which is already the default mode).
+        \subitem Ex: \texttt{f = open(\textquotesingle my\_file.txt\textquotesingle)}
+        \item \texttt{f.read()}: returns content of entire file as a string
+        \item \texttt{f.readline(): returns a single line from file}
+        \item \texttt{\textbf{for} line \textbf{in} f:} $\Rightarrow$ Iterate over all lines
+        \item \texttt{list(f)}/\texttt{f.readlines()}: read file lines to a list
+        \item \textbf{Always} close the file when you are done: \texttt{f.close()}
+    \end{itemize}
+
+\subsubsection{Creating/modifying files}
+    \begin{itemize}
+        \item Open the file with a write enabled mode, e.g, \texttt{w, x, a}
+        \subitem Ex: \texttt{f = open(\textquotesingle my\_file\textquotesingle ,\textquotesingle w\textquotesingle )}
+        \item Use \texttt{f.write(string)} to write to file.
+        \subitem \underline{Warning!} \texttt{file.write()} method \textbf{only} takes \texttt{\textbf{str}} values!
+        \item Close the file when you are done.
+        \item \texttt{f.close()}
+    \end{itemize}
+        
+\section{Exercises}
+\subsection{Catch Me If You Can}
+Our program is under attack. Guard our honor with necessary Try/Except blocks!
+\textbf{Possibilities are: }
+\begin{itemize}
+    \item NameError
+    \item SyntaxError
+    \item ValueError
+    \item ZeroDivisionError
+    \item IndexError
+    \item TypeError
+    
+\end{itemize}
+Also, for the "faculties" part, add some code to the program so that it will ask for an index until the input is a number.
+
+\subsection{Registrar's Office}
+You are a work and study student for the Registrar's Office, help manage Kusis.
+\begin{enumerate}
+    \item Oops, our database is not updated since last Fall, So correct the instructor for Engr 200 by changing it to Lerzan Ormeci.
+    \item Python Section 2 is missing 2 students, find and add them to the class set. 
+    \item Chem 103 and Econ 201 students will attend an interdisciplinary seminar, find the number of students who will be attending this seminar.
+    \item Math 205 class needs to be rescheduled, determine which time slot it can be placed without a time conflict.
+\end{enumerate}
+\newpage
+\begin{lstlisting}[language={}]
+Output:
+
+Chem 103	Sarp Kaya	 {'Gamze', 'Ata', 'Ayse', 'Mahsa', 'Furkan'}
+Engr 200	Lerzan Ormeci	 {'Ahmet', 'Canan', 'Furkan', 'Gonca'}
+Econ 201	Seda Ertac	 {'Gokce', 'Emirhan', 'Ayse', 'Abdullah', 'Meva'}
+Math 205	Nadim Rustom	 {'Ahmet', 'Zeynep', 'Mahsa', 'Ilayda'}
+Python Section 2	Hasan Can Aslan	 {'Gokce', 'Gamze', 'Emirhan', 'Ahmet', 'Meva', 'Ayse', 'Abdullah', 'Ilayda', 'Mahsa', 'Canan', 'Furkan', 'Gonca'}
+
+{'Ata', 'Zeynep'}
+
+{'Chem 103': ('Sarp Kaya', {'Gamze', 'Ata', 'Ayse', 'Mahsa', 'Furkan'}), 'Engr 200': ('Lerzan Ormeci', {'Ahmet', 'Canan', 'Furkan', 'Gonca'}), 'Econ 201': ('Seda Ertac', {'Gokce', 'Emirhan', 'Ayse', 'Abdullah', 'Meva'}), 'Math 205': ('Nadim Rustom', {'Ahmet', 'Zeynep', 'Mahsa', 'Ilayda'}), 'Python Section 2': ('Hasan Can Aslan', {'Gokce', 'Emirhan', 'Ata', 'Ayse', 'Abdullah', 'Mahsa', 'Canan', 'Furkan', 'Gamze', 'Ahmet', 'Ilayda', 'Meva', 'Gonca', 'Zeynep'})}
+
+9
+
+['Econ 201']
+
+\end{lstlisting}
+\subsection{World Happiness Report}
+You are given the dataset of World Happiness Report 2019, in a separate file named data.csv.
+\begin{enumerate}
+    \item Try to understand how data stored in data.csv file, and think about how to parse data. \newline
+        * CSV is a flat file format describing values in a table. Each record consists of M values, separated by commas. The last value is followed by a new line instead of a comma.
+    \item Try to understand what below code does:
+    \begin{lstlisting}
+with open('data.csv', 'r') as data_file:
+    lines = data_file.readlines()
+    # why did we use strip and split?
+    columns = tuple(lines[0].strip().split(',')[1:])
+    for row in lines[1:]:
+        row_data = row.strip().split(',')
+        data[row_data[0]] = tuple(row_data[1:])
+    data_file.close()
+    
+\end{lstlisting}
+\item Create a new file named corruption.csv that contains only country names and corruption statistics.
+\end{enumerate}
+
+\end{document}
